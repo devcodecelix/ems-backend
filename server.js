@@ -16,6 +16,10 @@ app.use(cors(
     }
 ));
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.use("/api/v1/auth", require("./routes/auth.route"));
 app.use("/api/v2/application", require("./routes/application.route"));
 app.use("/api/v3/intern", require("./routes/intern.route"));
