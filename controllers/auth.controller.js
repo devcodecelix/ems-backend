@@ -85,7 +85,8 @@ const googleCallback = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
-            sameSite: "none",
+            sameSite: "lax",
+            domain: ".codecelix.com",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         console.log("[12] Cookie set on response");
@@ -107,8 +108,8 @@ const logout = (req, res) => {
         res.clearCookie("token", {
             httpOnly: true,
             secure: true,
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: "lax",
+            domain: ".codecelix.com",
         });
         return res.status(200).json();
     } catch (err) {
