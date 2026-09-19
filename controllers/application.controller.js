@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 const application = async (req, res) => {
     try {
         const user = req.user;
-        const { batchId, domain, referenceNo, name } = req.body;
+        const { batchId, domain, referenceNo, name, location } = req.body;
 
         const getUser = await User.findById(user._id);
         if (!getUser) {
@@ -13,7 +13,7 @@ const application = async (req, res) => {
             return res.status(403).json({ message: "Access Denied" });
         }
 
-        if (!batchId || !domain || !referenceNo || !name) {
+        if (!batchId || !domain || !referenceNo || !name || !location) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -23,6 +23,7 @@ const application = async (req, res) => {
         getUser.batch.domain = domain;
         getUser.batch.referenceNo = referenceNo;
         getUser.name = name;
+        getUser.batch.location = location;
 
         await getUser.save();
 

@@ -127,7 +127,7 @@ const makebatchLeader = async (req, res) => {
 
         // remove previous leader if exists
         await User.updateMany(
-            { "batch.batchId": intern.batch.batchId, "batch.domain": intern.batch.domain, "batch.leader": true },
+            { "batch.batchId": intern.batch.batchId, "batch.domain": intern.batch.domain, "batch.leader": true, "user.location":intern.batch.location },
             { $set: { "batch.leader": false } }
         );
 
