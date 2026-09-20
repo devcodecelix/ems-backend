@@ -128,14 +128,19 @@ const makebatchLeader = async (req, res) => {
 
         // remove previous leader if exists
         await User.updateMany(
-            { "batch.batchId": intern.batch.batchId, "batch.domain": intern.batch.domain, "batch.leader": true, "user.location": intern.batch.location },
+            {
+                "batch.batchId": intern.batch.batchId,
+                "batch.domain": intern.batch.domain,
+                "batch.location": intern.batch.location,
+                "batch.leader": true,
+            },
             { $set: { "batch.leader": false } }
         );
 
         intern.batch.leader = true;
         await intern.save();
 
-        return res.status(200).json();
+        return res.status(200).json({ message: "Batch leader updated successfully" });
     } catch (err) {
         console.log("Error in makebatchLeader:", err);
         return res.status(500).json({ message: "Internal Server Error" });
