@@ -6,6 +6,9 @@ const {
     deleteIntern,
     getAllInterns,
     makebatchLeader,
+    assignNewProject,
+    getAllProjects,
+    deleteProject,
 } = require("../controllers/admin.controller");
 const router = express.Router();
 const { protectedRoute } = require("../middlewares/auth.middleware");
@@ -17,5 +20,9 @@ router.route("/intern/:internId").delete(protectedRoute, deleteIntern); // to de
 router.get("/intern/:referenceNo", protectedRoute, getInterneAttendence); // to get intern attendance history
 router.get("/intern", protectedRoute, getAllInterns); // to get all interns
 router.route("/admin/make-batch-leader").post(protectedRoute, makebatchLeader); // to make an intern a batch leader
+
+router.route("/project").post(protectedRoute, assignNewProject); // to assign a new project to a batch
+router.route("/project").get(protectedRoute, getAllProjects); // to get all projects assigned to a batch
+router.route("/project/:projectId").delete(protectedRoute, deleteProject); // to delete a project by admin
 
 module.exports = router;

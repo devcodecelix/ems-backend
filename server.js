@@ -25,6 +25,7 @@ app.use("/api/v2/application", require("./routes/application.route"));
 app.use("/api/v3/intern", require("./routes/intern.route"));
 app.use("/api/v4/attendance", require("./routes/attendance.route"));
 app.use("/api/v5/admin", require("./routes/admin.route"));
+app.use("/api/v6/project", require("./routes/project.route"));
 
 connectDB().then(() => {
     app.listen(PORT, () => {
