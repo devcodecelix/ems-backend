@@ -6,6 +6,8 @@ const {
     deleteIntern,
     getAllInterns,
     makebatchLeader,
+    removeBatchLeader,
+    getBatchAttendanceExcel,
     assignNewProject,
     getAllProjects,
     deleteProject,
@@ -19,7 +21,9 @@ router.get("/application", protectedRoute, getAllApplications); // to get all ap
 router.route("/intern/:internId").delete(protectedRoute, deleteIntern); // to delete an intern by admin
 router.get("/intern/:referenceNo", protectedRoute, getInterneAttendence); // to get intern attendance history
 router.get("/intern", protectedRoute, getAllInterns); // to get all interns
+router.get("/attendance/excel", protectedRoute, getBatchAttendanceExcel); // to download the monthly attendance excel of a batch
 router.route("/admin/make-batch-leader").post(protectedRoute, makebatchLeader); // to make an intern a batch leader
+router.route("/admin/remove-batch-leader").post(protectedRoute, removeBatchLeader); // to remove an intern from batch leader
 
 router.route("/project").post(protectedRoute, assignNewProject); // to assign a new project to a batch
 router.route("/project").get(protectedRoute, getAllProjects); // to get all projects assigned to a batch

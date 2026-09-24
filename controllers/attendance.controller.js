@@ -8,14 +8,14 @@ const markBatchattendance = async (req, res) => {
             return res.status(403).json({ message: "Access Denied" });
         }
 
-        const { batchId, domain, referenceNos } = req.body;
+        const { batchId, domain, referenceNos = [], absentReferenceNos = [] } = req.body;
 
-        if (!batchId || !domain || !referenceNos) {
+        if (!batchId || !domain) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        if(referenceNos.length === 0) {
-            return res.status(400).json({ message: "No reference numbers provided" });
+        if (referenceNos.length === 0 && absentReferenceNos.length === 0) {
+            return res.status(400).json({ message: "No interns provided" });
         }
 
         const today = new Date();
@@ -27,13 +27,21 @@ const markBatchattendance = async (req, res) => {
             return res.status(400).json({ message: "attendance already marked" });
         }
 
-        const attendanceRecords = referenceNos.map((referenceNo) => ({
+        const presentRecords = referenceNos.map((referenceNo) => ({
             referenceNo,
             batchId,
             domain,
+            status: "present",
         }));
 
-        await Attendance.insertMany(attendanceRecords);
+        const absentRecords = absentReferenceNos.map((referenceNo) => ({
+            referenceNo,
+            batchId,
+            domain,
+            status: "absent",
+        }));
+
+        await Attendance.insertMany([...presentRecords, ...absentRecords]);
 
         return res.status(200).json();
     } catch (err) {
@@ -78,9 +86,28 @@ const getInterneAttendence = async (req, res) => {
             return res.status(403).json({ message: "Access Denied" });
         }
 
-        const getAttendance = await Attendance.find({ referenceNo: user.batch.referenceNo }).sort({ date: -1 });
+        const { batchId, domain, referenceNo } = user.batch;
 
-        res.status(200).json(getAttendance);
+        const batchAttendance = await Attendance.find({ batchId, domain }).sort({ date: -1 });
+
+        const presentDates = new Set(
+            batchAttendance
+                .filter((record) => record.referenceNo === referenceNo)
+                .map((record) => record.date.toISOString().split("T")[0])
+        );
+
+        const dates = new Map();
+        batchAttendance.forEach((record) => {
+            const key = record.date.toISOString().split("T")[0];
+            if (dates.has(key)) return;
+            dates.set(key, {
+                _id: record._id,
+                date: record.date,
+                status: presentDates.has(key) ? "present" : "absent",
+            });
+        });
+
+        res.status(200).json(Array.from(dates.values()));
     } catch (error) {
         console.error("Error fetching attendance history:", error);
         res.status(500).json({ message: "Failed to fetch attendance history" });
