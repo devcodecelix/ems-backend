@@ -17,6 +17,11 @@ const application = async (req, res) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
+        const getuserNyreferenceNo = await User.findOne({ "batch.referenceNo": referenceNo });
+        if (getuserNyreferenceNo) {
+            return res.status(400).json({ message: "Reference number already exists" });
+        }
+
         getUser.role = "applied";
 
         getUser.batch.batchId = batchId;

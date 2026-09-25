@@ -1,4 +1,3 @@
-const User = require("../models/user.model");
 const Attendance = require("../models/attendance.model");
 
 const markBatchattendance = async (req, res) => {
@@ -88,26 +87,9 @@ const getInterneAttendence = async (req, res) => {
 
         const { batchId, domain, referenceNo } = user.batch;
 
-        const batchAttendance = await Attendance.find({ batchId, domain }).sort({ date: -1 });
+        const interneeAttendance = await Attendance.find({ batchId, domain, referenceNo }).sort({ date: -1 });
 
-        const presentDates = new Set(
-            batchAttendance
-                .filter((record) => record.referenceNo === referenceNo)
-                .map((record) => record.date.toISOString().split("T")[0])
-        );
-
-        const dates = new Map();
-        batchAttendance.forEach((record) => {
-            const key = record.date.toISOString().split("T")[0];
-            if (dates.has(key)) return;
-            dates.set(key, {
-                _id: record._id,
-                date: record.date,
-                status: presentDates.has(key) ? "present" : "absent",
-            });
-        });
-
-        res.status(200).json(Array.from(dates.values()));
+        res.status(200).json(interneeAttendance);
     } catch (error) {
         console.error("Error fetching attendance history:", error);
         res.status(500).json({ message: "Failed to fetch attendance history" });

@@ -79,7 +79,6 @@ const googleCallback = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         res.redirect(`${process.env.CLIENT_URL}`);
-        console.log("[14] Redirect sent - request complete");
     } catch (err) {
         console.log("Error in googleCallback:", err.message);
         res.status(500).send("Authentication failed");
