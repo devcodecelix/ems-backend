@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema(
       },
       referenceNo: {
         type: String,
-        unique: true,
       },
       leader: {
         type: Boolean,

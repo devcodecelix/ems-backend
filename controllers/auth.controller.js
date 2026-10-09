@@ -54,11 +54,9 @@ const googleCallback = async (req, res) => {
         let user = await User.findOne({ email });
 
         if (!user) {
-            console.log("[8] Creating new user...");
             user = await User.create({
                 email
             });
-            console.log("[9] New user created with id:", user._id);
         }
 
         const token = jwt.sign(
