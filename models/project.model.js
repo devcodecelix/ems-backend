@@ -15,7 +15,7 @@ const projectSchema = new mongoose.Schema(
         },
         domain: {
             type: String,
-            enum: ["web", "ai", "app"],
+            enum: ["WEB", "AI", "APP", "UIUX"],
             required: true,
         },
         location: {

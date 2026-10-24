@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      trim: true,
     },
     email: {
       type: String,
@@ -18,12 +19,19 @@ const userSchema = new mongoose.Schema(
     batch: {
       batchId: {
         type: Number,
+        min: 17,
+        max: 30,
       },
       domain: {
         type: String,
-        enum: ["web", "ai", "app"],
+        enum: ["WEB", "AI", "APP", "UIUX"],
       },
-      referenceNo: {
+      rollNo: {
+        type: Number,
+        min: 1,
+        max: 50,
+      },
+      referenceNo:{
         type: String,
       },
       leader: {
@@ -33,10 +41,18 @@ const userSchema = new mongoose.Schema(
       location: {
         type: String,
         enum: ["onsite", "remote"],
-      }
+      },
     },
   },
   { timestamps: true }
+);
+
+userSchema.index(
+  { "batch.batchId": 1, "batch.domain": 1, "batch.rollNo": 1 },
+  {
+    unique: true,
+    partialFilterExpression: { "batch.rollNo": { $exists: true } },
+  }
 );
 
 const User = mongoose.model("User", userSchema);

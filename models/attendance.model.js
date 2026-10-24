@@ -12,7 +12,7 @@ const attendanceSchema = new mongoose.Schema(
         },
         domain: {
             type: String,
-            enum: ["web", "ai", "app"],
+            enum: ["WEB", "AI", "APP", "UIUX"],
             required: true,
         },
         date: {
