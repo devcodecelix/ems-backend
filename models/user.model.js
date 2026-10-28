@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
     batch: {
       batchId: {
         type: Number,
-        min: 17,
+        min: 16,
         max: 30,
       },
       domain: {

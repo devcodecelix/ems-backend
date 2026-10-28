@@ -15,7 +15,7 @@ const application = async (req, res) => {
         if (!cleanName) {
             return res.status(400).json({ message: "Name is required" });
         }
-        if (!Number.isInteger(batchNum) || batchNum < 17 || batchNum > 30) {
+        if (!Number.isInteger(batchNum) || batchNum < 16 || batchNum > 30) {
             return res.status(400).json({ message: "Invalid batch" });
         }
         if (!["WEB", "AI", "APP", "UIUX"].includes(domain)) {
